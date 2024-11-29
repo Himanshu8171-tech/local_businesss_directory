@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - LocalConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Moonrocks&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Gradient Background with Animation */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #d8bfd8, #f5f5dc); /* Purple and Cream */
+            background-size: 200% 200%;
+            animation: backgroundMove 10s infinite alternate;
+            z-index: -2;
+        }
+
+        /* Diagonal Lines Overlay */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.1) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0.1) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 40px 40px;
+            animation: linesMove 5s linear infinite;
+            z-index: -1;
+        }
+
+        /* Animations for Background and Lines */
+        @keyframes backgroundMove {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+
+        @keyframes linesMove {
+            from {
+                transform: translateX(0) translateY(0);
+            }
+            to {
+                transform: translateX(-40px) translateY(-40px);
+            }
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            font-size: 3rem;
+            font-family: 'Rubik Moonrocks', cursive;
+            font-weight: bold;
+            color: #4b0082; /* Indigo for contrast */
+            text-shadow: 3px 3px 10px #ffffff;
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 60vh;
+        }
+
+        .warning-sign {
+            color: #ff6347; /* Red warning color */
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .login-form {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .login-form input {
+            margin: 10px;
+            padding: 15px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            width: 250px;
+            outline: none;
+        }
+
+        .login-form button {
+            padding: 15px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+            background-color: #6a5acd; /* Purple shade */
+            transition: background-color 0.3s, transform 0.2s;
+            width: 250px;
+        }
+
+        .login-form button:hover {
+            background-color: #9370db; /* Light purple shade */
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+<body>
+    <header>Admin Panel - LocalConnect</header>
+    <div class="login-container">
+        <div class="warning-sign">
+            ⚠️ Admin Panel - Unauthorized access will be logged.
+        </div>
+        <div class="login-form">
+            <label for="admin-id">Admin ID:</label>
+            <input type="text" id="admin-id" name="admin-id" placeholder="Enter Admin ID" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter Password" required>
+
+            <button id="loginButton">Login</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("loginButton").addEventListener("click", function() {
+            // Simulate login validation (you can replace this with actual validation logic)
+            var adminId = document.getElementById("admin-id").value;
+            var password = document.getElementById("password").value;
+            
+            // For now, redirect if both fields are not empty
+            if (adminId = 1234 && password == 1111) {
+                window.location.href = "admin-dashboard.html";
+            } else {
+                alert("Please enter both Admin ID and Password.");
+            }
+        });
+    </script>
+</body>
+</html>

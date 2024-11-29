@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumer Dashboard - Add Your Business</title>
+    <style>
+        /* Add your styles for dark theme */
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h2 {
+            color: white;
+            text-align: center;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #222;
+            border-radius: 10px;
+        }
+
+        .form-container div {
+            flex: 1;
+            margin: 10px;
+        }
+
+        label {
+            color: white;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #333;
+            color: white;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Changed color for Generate ID button */
+        #generateIDBtn {
+            background-color: #ff5722;
+            color: white;
+        }
+
+        #generateIDBtn:hover {
+            background-color: #ff3d00;
+        }
+
+        .instructions {
+            color: #bbb;
+            font-size: 12px;
+        }
+
+        /* Popup Instructions */
+        .popup {
+            background-color: #ff9800;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            position: absolute;
+            display: none;
+        }
+
+    </style>
+    <script>
+        function generateConsumerID() {
+            let consumerID = Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('consumerID').value = consumerID;
+        }
+
+        function showPopup(field) {
+            let popup = document.getElementById(field);
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3000);
+        }
+
+        function handleSubmit() {
+            let businessName = document.getElementById('businessName').value;
+            let category = document.getElementById('category').value;
+            let businessLocation = document.getElementById('businessLocation').value;
+            let consumerID = document.getElementById('consumerID').value;
+            let businessDescription = document.getElementById('businessDescription').value;
+            let openingTime = document.getElementById('openingTime').value;
+            let closingTime = document.getElementById('closingTime').value;
+
+            let business = {
+                businessName,
+                category,
+                businessLocation,
+                consumerID,
+                businessDescription,
+                openingTime,
+                closingTime,
+                verificationStatus: "Pending", // Default verification status
+            };
+
+            console.log("Business added:", business);
+            alert("Your business has been successfully added!");
+
+            // For now, we're just logging the data. In a real app, you'd save it to a database.
+            // You can display it dynamically on the main page after saving it.
+
+            // Redirect or refresh to show the business on the main page (mock display)
+            window.location.href = "main.html"; // Or update the business list dynamically
+        }
+    </script>
+</head>
+<body>
+    <header>Consumer Dashboard</header>
+
+    <div class="container">
+        <h2>Add Your Business</h2>
+
+        <div class="form-container">
+            <div>
+                <label for="businessName">Business Name:</label>
+                <input type="text" id="businessName" placeholder="Enter business name" onfocus="showPopup('businessNamePopup')" required>
+
+                <label for="category">Business Category:</label>
+                <select id="category" onfocus="showPopup('categoryPopup')" required>
+                    <option value="Retail">Retail</option>
+                    <option value="Services">Services</option>
+                    <option value="Food & Beverage">Food & Beverage</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Healthcare">Healthcare</option>
+                </select>
+
+                <label for="businessDescription">Business Description:</label>
+                <textarea id="businessDescription" placeholder="Enter business description" onfocus="showPopup('descriptionPopup')" required></textarea>
+                
+                <label for="businessLocation">Business Location:</label>
+                <input type="text" id="businessLocation" placeholder="Enter business location (e.g., city, state)" onfocus="showPopup('locationPopup')" required>
+
+                <!-- Adding Opening Time and Closing Time -->
+                <label for="openingTime">Opening Time:</label>
+                <input type="time" id="openingTime" required>
+
+                <label for="closingTime">Closing Time:</label>
+                <input type="time" id="closingTime" required>
+            </div>
+
+            <div>
+                <label for="businessImages">Business Photos (Min 4):</label>
+                <input type="file" id="image1" accept="image/*" onfocus="showPopup('image1Popup')" required>
+                <input type="file" id="image2" accept="image/*" onfocus="showPopup('image2Popup')" required>
+                <input type="file" id="image3" accept="image/*" onfocus="showPopup('image3Popup')" required>
+                <input type="file" id="image4" accept="image/*" onfocus="showPopup('image4Popup')" required>
+
+                <label for="consumerID">Unique Consumer ID:</label>
+                <input type="text" id="consumerID" disabled placeholder="Your unique ID will appear here">
+                
+                <button type="button" id="generateIDBtn" onclick="generateConsumerID()">Generate Consumer ID</button>
+                <button type="button" onclick="handleSubmit()">Submit Business</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popups for Field Instructions -->
+    <div class="popup" id="businessNamePopup"><p>Enter your business name here.</p></div>
+    <div class="popup" id="categoryPopup"><p>Select the category that best fits your business.</p></div>
+    <div class="popup" id="descriptionPopup"><p>Write a description of your business.</p></div>
+    <div class="popup" id="image1Popup"><p>Upload a relevant image of your business.</p></div>
+    <div class="popup" id="image2Popup"><p>Upload another image of your business.</p></div>
+    <div class="popup" id="image3Popup"><p>Upload a third image of your business.</p></div>
+    <div class="popup" id="image4Popup"><p>Upload a fourth image of your business.</p></div>
+    <div class="popup" id="locationPopup"><p>Provide the location of your business (city, state, etc.).</p></div>
+</body>
+</html>

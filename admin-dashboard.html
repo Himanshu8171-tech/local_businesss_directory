@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LocalConnect</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .header {
+            background-color: #333;
+            padding: 20px;
+            text-align: left;
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .header h1 {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-bar input, .search-bar button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .search-bar input {
+            width: 80%;
+            background-color: #2c2c2c;
+            color: #fff;
+        }
+
+        .search-bar button {
+            background-color: #6a5acd;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #9370db;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-buttons button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background-color: #ffa500;
+            color: #fff;
+        }
+
+        .delete-btn {
+            background-color: #e60000;
+            color: #fff;
+        }
+
+        .edit-btn:hover {
+            background-color: #ff8c00;
+        }
+
+        .delete-btn:hover {
+            background-color: #ff3333;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #555;
+            color: #e0e0e0;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #444;
+        }
+
+        table th {
+            background-color: #333;
+        }
+
+        table tr:hover {
+            background-color: #444;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination button {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #6a5acd;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pagination button:hover {
+            background-color: #9370db;
+        }
+
+        .add-btn {
+            padding: 12px 18px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .add-btn:hover {
+            background-color: #218838;
+        }
+
+        .details-btn {
+            background-color: #ff4500;
+            color: #fff;
+        }
+
+        .details-btn:hover {
+            background-color: #ff6347;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Admin Dashboard - LocalConnect</h1>
+    </div>
+
+    <div class="container">
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for Business or User...">
+            <button onclick="search()">Search</button>
+        </div>
+
+        <!-- Add Business/User Button -->
+        <button class="add-btn" onclick="addNew()">Add New Business/User</button>
+    </div>
+
+    <!-- Table Container -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Table data will be populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        <button onclick="previousPage()">Previous</button>
+        <button onclick="nextPage()">Next</button>
+    </div>
+
+    <script>
+        // Sample data for businesses and users
+        const data = [
+            { id: 1, name: "Tech Solutions", category: "IT", type: "business" },
+            { id: 2, name: "John Doe", category: "Consumer", type: "user" },
+            { id: 3, name: "Supermarket", category: "Retail", type: "business" },
+            { id: 4, name: "Jane Smith", category: "Consumer", type: "user" },
+            { id: 5, name: "WebDev Co.", category: "IT", type: "business" },
+            { id: 6, name: "Alex Brown", category: "Consumer", type: "user" },
+            { id: 7, name: "Marketing Group", category: "Advertising", type: "business" },
+            { id: 8, name: "Ella White", category: "Consumer", type: "user" },
+            // Add more sample data as needed
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 4;
+
+        // Function to render data into the table
+        function renderTable(dataToRender) {
+            const tableBody = document.getElementById("tableBody");
+            tableBody.innerHTML = ""; // Clear existing rows
+
+            dataToRender.forEach(item => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category}</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn" onclick="editItem(${item.id})">Edit</button>
+                        <button class="details-btn" onclick="viewDetails(${item.id})">View Details</button>
+                        <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Function to handle the search functionality
+        function search() {
+            const searchQuery = document.getElementById("searchInput").value.toLowerCase();
+            const filteredData = data.filter(item => 
+                item.name.toLowerCase().includes(searchQuery) || 
+                item.category.toLowerCase().includes(searchQuery)
+            );
+            renderTable(filteredData);
+        }
+
+        // Function to handle adding a new business/user
+        function addNew() {
+            alert("Add New feature not implemented.");
+        }
+
+        // Function to handle editing an item
+        function editItem(id) {
+            alert("Edit feature not implemented. Editing item with ID " + id);
+        }
+
+        // Function to handle viewing more details
+        function viewDetails(id) {
+            alert("View Details feature not implemented. Viewing item with ID " + id);
+        }
+
+        // Function to handle deleting an item
+        function deleteItem(id) {
+            const confirmation = confirm("Are you sure you want to delete this item?");
+            if (confirmation) {
+                // Remove item from data array
+                const index = data.findIndex(item => item.id === id);
+                if (index !== -1) {
+                    data.splice(index, 1);
+                    renderTable(data);
+                    alert("Item deleted successfully");
+                }
+            }
+        }
+
+        // Pagination Functions
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                loadPageData();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage * itemsPerPage < data.length) {
+                currentPage++;
+                loadPageData();
+            }
+        }
+
+        // Function to load the data for the current page
+        function loadPageData() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = currentPage * itemsPerPage;
+            const currentData = data.slice(start, end);
+            renderTable(currentData);
+        }
+
+        // Initial render of the table
+        loadPageData();
+    </script>
+</body>
+</html>
